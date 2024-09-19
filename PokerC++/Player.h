@@ -5,7 +5,7 @@
 #include "Deck.h"
 #include "Pot.h"
 
-enum State {IDLE, CHECK, BET, FOLD, DEAD};
+enum State {IDLE, CHECK, BET, ALLIN, FOLD, DEAD};
 
 class Player{
 private:
@@ -22,6 +22,7 @@ public:
 	//Getter
 	string getName();
 	int getChips();
+	int getBetChips();
 	Pot* getPot();
 	Pot* getBetPot();
 	Hand* getHand();
@@ -42,9 +43,9 @@ public:
 	void displayHand();
 
 	//Player actions
-	void choice(Pot* pot, Deck* deck);
+	void choice(Pot* pot, Deck* deck, int maxBet);
 	void check();
-	void bet();
+	void bet(int maxBet);
 	void allin();
 	void fold(Deck* deck);
 	void show();

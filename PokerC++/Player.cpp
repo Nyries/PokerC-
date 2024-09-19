@@ -1,5 +1,6 @@
 #include "Player.h"
 
+
 Player::Player(string name, int chips) : name(name), pot(new Pot(chips)), betPot(new Pot(0)), hand(new Hand), state(static_cast<State>(0))
 {
 }
@@ -15,6 +16,11 @@ string Player::getName()
 
 int Player::getChips() {
 	return pot->getChips();
+}
+
+int Player::getBetChips()
+{
+	return betPot->getChips();
 }
 
 Pot* Player::getPot() {
@@ -76,19 +82,23 @@ void Player::displayHand()
 	hand->displayCards();
 }
 
-void Player::choice(Pot* pot, Deck* deck){
+void Player::choice(Pot* pot, Deck* deck, int maxBet){
 	string playerChoice;
-	cout << "What do you play ? (check, bet, allin, fold, show)" << endl;
+	cout << name << " what do you play ? (check, bet, allin, fold, show)" << endl;
 	cin >> playerChoice;
-	while (playerChoice != "check" or playerChoice != "bet" or playerChoice != "allin" or playerChoice != "fold" or playerChoice != "show") {
-		cout << "Please write an appropriate playerChoice." << endl;
+	while (playerChoice != "check" and playerChoice != "bet" and playerChoice != "allin" and playerChoice != "fold" and playerChoice != "show") {
+		cout << "Please write an appropriate choice. " << name << ", what do you play ?" << endl;
 		cin >> playerChoice;
 	}
 	if (playerChoice == "check") {
+		if (maxBet != 0) {
+			cout << "You can't check when someone already bet" << endl;
+			choice(pot, deck, maxBet);
+		}
 		check();
 	}
 	else if (playerChoice == "bet") {
-		bet();
+		bet(maxBet);
 	}
 	else if (playerChoice == "allin") {
 		allin();
@@ -98,7 +108,7 @@ void Player::choice(Pot* pot, Deck* deck){
 	}
 	else if (playerChoice == "show") {
 		show();
-		choice(pot, deck);
+		choice(pot, deck, maxBet);
 	}
 }
 
@@ -107,7 +117,7 @@ void Player::check() {
 	this->state = CHECK;
 }
 
-void Player::bet() {
+void Player::bet(int maxBet) {
 	this->state = BET;
 	int chipsBet=0;
 	cout << "How many chips do you want to bet ?" << endl;
@@ -116,6 +126,12 @@ void Player::bet() {
 		cout << "Please put a reasonable amount. You have " << this->pot->getChips() << " chips." << endl;
 		cin >> chipsBet;
 	}
+	if (chipsBet + betPot->getChips() < maxBet and chipsBet != pot->getChips() + betPot->getChips()) {
+		cout << "You can't bet less than the maximum bet" << endl;
+		bet(maxBet);
+		return;
+	}
+	
 	this->pot->giveChipsTo(chipsBet, this->betPot);
 
 }
@@ -134,6 +150,8 @@ void Player::fold(Deck* deck)
 }
 
 void Player::show() {
+	hand->setFacesUp();
 	this->hand->displayCards();
+	hand->setFacesDown();
 }
 

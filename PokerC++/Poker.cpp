@@ -1,8 +1,10 @@
 #include "Poker.h"
 
 Poker::Poker() {
-	this->pot = new Pot(0);
+	this->table = new CircularPlayerList();
+	this->deck = new Deck();
 	this->commonCard = new CommonCard();
+	this->pot = new Pot(0);
 }
 
 Poker::~Poker()
@@ -37,14 +39,20 @@ void Poker::launch(){
 	table->setChips(numberOfChips);
 	delete& numberOfChips;
 	cout << "Let's begin!" << endl;
-	this->deck = new Deck();
 	gameLoop();
 }
 
 void Poker::gameLoop() {
 	while (!table->isOnePlayerAlive()) {
 		cout << "Distribution des cartes." << endl;
+		deck->shuffle();
 		table->dealTheCardsFrom(deck);
 		table->playerChoices(pot, deck);
+		flop();
+		table->playerChoices(pot, deck);
+		turn();
+		table->playerChoices(pot, deck);
+		river();
+
 	}
 }

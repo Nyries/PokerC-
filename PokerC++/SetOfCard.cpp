@@ -1,5 +1,7 @@
 #include "SetOfCard.h"
 
+
+
 int SetOfCard::findCard(Card* card){
 	auto it = find_if(cards.begin(), cards.end(), [&card](Card* c) {
 		return *c == *card;
@@ -24,6 +26,20 @@ vector<Card*> SetOfCard::getCards()
 	return cards;
 }
 
+void SetOfCard::setFacesUp()
+{
+	for (Card* card : cards) {
+		card->setFace(true);
+	}
+}
+
+void SetOfCard::setFacesDown()
+{
+	for (Card* card : cards) {
+		card->setFace(false);
+	}
+}
+
 bool SetOfCard::isEmpty()
 {
 	return cards.empty();
@@ -35,7 +51,7 @@ void SetOfCard::displayCards(){
 		return;
 	}
 	
-	const int numLines = 15;
+	const int numLines = 11;
 
 	vector<vector<string>> cardDisplays;
 	for (Card* card : cards) {

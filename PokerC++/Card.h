@@ -9,7 +9,7 @@
 using namespace std;
 
 enum Suit { HEARTS, DIAMONDS, CLUBS, SPADES , NUMBEROFSUIT};  // Les 4 couleurs
-enum Rank { TWO = 2, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE, NUMBEROFRANK};  // Valeurs des cartes
+enum Rank { TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE, NUMBEROFRANK};  // Valeurs des cartes
 
 class Card {
 private:

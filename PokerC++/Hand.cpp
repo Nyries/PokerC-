@@ -1,5 +1,8 @@
 #include "Hand.h"
 
+#include <chrono>
+#include <thread>
+
 Hand::Hand(){
 }
 
@@ -15,6 +18,27 @@ int Hand::getNumberOfCards()
 Card* Hand::getCardByIndex(int index)
 {
 	return nullptr;
+}
+
+void Hand::displayCards()
+{
+	if (cards.empty()) {
+		cout << "No card to display" << endl;
+		return;
+	}
+
+	const int numLines = 11;
+
+	vector<vector<string>> cardDisplays;
+	for (Card* card : cards) {
+		cardDisplays.push_back(card->getCardDisplay());
+	}
+	for (int line = 0; line < numLines; line++) {
+		for (size_t i = 0; i < cards.size(); i++) {
+			cout << cardDisplays[i][line] << "  ";
+		}
+		cout << endl;
+	}
 }
 
 void Hand::dealCardsFrom(Deck* deck){

@@ -6,8 +6,11 @@ int CircularPlayerList::getNumberOfPlayerAlive() {
 	}
 	int numberOfPlayerAlive=0;
 	PlayerNode* temp = head;
+	PlayerNode* prev = nullptr;
+
 	do {
 		if (!temp->player->isDead()) numberOfPlayerAlive++;
+		temp = temp->next;
 	} while (temp != head);
 	return numberOfPlayerAlive;
 }
@@ -18,8 +21,10 @@ int CircularPlayerList::getNumberOfPlayerFold() {
 	}
 	int numberOfPlayerFold = 0;
 	PlayerNode* temp = head;
+
 	do {
 		if (!temp->player->isFold()) numberOfPlayerFold++;
+		temp = temp->next;
 	} while (temp != head);
 	return numberOfPlayerFold;
 }
@@ -29,12 +34,36 @@ vector<int> CircularPlayerList::getPlayerChips()
 	return vector<int>();
 }
 
+int CircularPlayerList::getMaxBet()
+{
+	int maxBet = 0;
+	PlayerNode* temp = head;
+	do {
+		if (temp->player->getState() != DEAD or temp->player->getState() != IDLE) {
+			if (temp->player->getBetChips() > maxBet) maxBet = temp->player->getBetChips();
+		}
+	} while (temp != head);
+	return maxBet;
+}
+
+vector<int> CircularPlayerList::getBetChips()
+{
+	vector<int> betChips;
+	PlayerNode* temp = head;
+	do {
+		if (temp->player->getState() == CHECK or temp->player->getState() == BET or temp->player->getState() == IDLE) {
+			betChips.push_back(temp->player->getBetChips());
+		}
+		temp = temp->next;
+	} while (temp != head);
+	return betChips;
+}
+
 bool CircularPlayerList::isOnePlayerAlive() {
 	if (!head) {
 		throw runtime_error("No players currently.");
 	}
-	int numberOfPlayerAlive = getNumberOfPlayerAlive();
-	if (numberOfPlayerAlive == 1) {
+	if (getNumberOfPlayerAlive() == 1) {
 		return true;
 	}
 	else {
@@ -46,8 +75,7 @@ bool CircularPlayerList::isOnePlayerNotFold() {
 	if (!head) {
 		throw runtime_error("No players currently.");
 	}
-	int numberOfPlayerNotFold = getNumberOfPlayerFold();
-	if (numberOfPlayerNotFold == 1) {
+	if (getNumberOfPlayerFold() == 1) {
 		return true;
 	}
 	else {
@@ -55,16 +83,35 @@ bool CircularPlayerList::isOnePlayerNotFold() {
 	}
 }
 
-bool CircularPlayerList::isBetPotEqual() {
+bool CircularPlayerList::isNoPlayerIdle()
+{
 	if (!head) {
 		throw runtime_error("No players currently.");
 	}
 	PlayerNode* temp = head;
 	do {
+		if (temp->player->getState() == IDLE) {
+			return false;
+		}
+		temp = temp->next;
 	} while (temp != head);
-	return false;
+	return true;
+}
+
+bool CircularPlayerList::isBetPotEqual()
+{
+	vector<int> betChips = getBetChips();
+	PlayerNode* temp = head;
+	int prev = betChips[0];
+	for (int chips : betChips) {
+		if (prev != chips) {
+			return false;
+		}
+	}
+	return true;
 	
 }
+
 
 void CircularPlayerList::addPlayer(Player* player) {
 	PlayerNode* newNode = new PlayerNode(player);
@@ -124,9 +171,16 @@ void CircularPlayerList::playerChoices(Pot* pot, Deck* deck) {
 		throw runtime_error("No player.");
 	}
 	PlayerNode* temp = head;
+	int maxBet = 0;
 	do {
-		temp->player->choice(pot, deck);
-	} while (temp != head);
+		if (temp->player->getState() != DEAD or temp->player->getState() != FOLD) {
+			maxBet = getMaxBet();
+			temp->player->choice(pot, deck, maxBet);
+		}
+		if (isOnePlayerNotFold()) break;
+		temp = temp->next;
+	} while (!isBetPotEqual() or !isNoPlayerIdle()); //un seul joueur n'a pas fold ou les bets parmi les joueurs CHECK, BET et IDLE sont égaux
+	cout << "Yo" << endl;
 }
 
 void CircularPlayerList::setChips(int chips){

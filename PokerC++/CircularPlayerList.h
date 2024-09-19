@@ -16,12 +16,14 @@ public:
 	int getNumberOfPlayerAlive();
 	int getNumberOfPlayerFold();
 	vector<int> getPlayerChips();
+	int getMaxBet();
+	vector<int> getBetChips();
 
 	//State function
 	bool isOnePlayerAlive();
 	bool isOnePlayerNotFold();
+	bool isNoPlayerIdle();
 	bool isBetPotEqual();
-
 
 	void addPlayer(Player* player);
 	void removePlayer(const string& name);

@@ -15,6 +15,7 @@ public:
 	Card* getCardByIndex(int index);
 
 	//Other Functions
+	void displayCards();
 	void dealCardsFrom(Deck* deck);
 	void addCardFrom(vector<Card*> cards);
 	void clearHandTo(Deck* deck);

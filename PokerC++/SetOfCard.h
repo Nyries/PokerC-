@@ -14,10 +14,14 @@ public:
 	SetOfCard();
 	virtual ~SetOfCard();
 
-	//Getter, Setter
+	//Getter
 	virtual int getNumberOfCards() = 0;
 	virtual Card* getCardByIndex(int index) = 0;
 	vector<Card*> getCards();
+
+	//Setter
+	void setFacesUp();
+	void setFacesDown();
 
 	//State function
 	bool isEmpty();

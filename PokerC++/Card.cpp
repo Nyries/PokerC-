@@ -38,11 +38,16 @@ vector<string> Card::getCardDisplay() const {
     vector<string> cardDisplay;
     if (this->isFaceUp) {
         cardDisplay.push_back("-----------------");
-        cardDisplay.push_back("|" + getSuitAsString() + "                |");
+        cardDisplay.push_back("|" + getSuitAsString() + "              |");
         cardDisplay.push_back("|               |");
         cardDisplay.push_back("|               |");
         cardDisplay.push_back("|               |");
-        cardDisplay.push_back("|       " + getRankAsString() + "       |");
+        if (getRank() == TEN){
+            cardDisplay.push_back("|       " + getRankAsString() + "      |");
+        }
+        else {
+            cardDisplay.push_back("|       " + getRankAsString() + "       |");
+        }
         cardDisplay.push_back("|               |");
         cardDisplay.push_back("|               |");
         cardDisplay.push_back("|               |");
