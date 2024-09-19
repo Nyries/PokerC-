@@ -56,3 +56,15 @@ void Poker::gameLoop() {
 
 	}
 }
+
+void Poker::flop()
+{
+}
+
+void Poker::turn()
+{
+}
+
+void Poker::river()
+{
+}

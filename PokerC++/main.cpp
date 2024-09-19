@@ -5,17 +5,25 @@
 #include "Poker.h"
 
 int main() {
-	//Premier test
+	//Test for the cards
 	Card carte(CLUBS, TWO);
 	carte.setFace(true);
 	carte.displayCard();
-	//Hand hand = Hand();
-	//deck.shuffle();
-	//hand.dealCardsFrom(&deck);
-	//hand.displayCards();
-	//player1.dealCardsFrom(&deck);
-	//player1.displayHand();
-	
+
+	//Test for players and table
+	Deck deck = Deck(); // Deck generated
+	Pot pot = Pot(0); //Middle pot
+	deck.shuffle();
+	Player jean = Player("Jean", 10);
+	Player michel = Player("Michel", 10);
+	Player annie = Player("Annie", 10);
+	CircularPlayerList table = CircularPlayerList();
+	table.addPlayer(&jean);
+	table.addPlayer(&michel);
+	table.addPlayer(&annie);
+	table.dealTheCardsFrom(&deck);
+	table.playerChoices(&pot, &deck);
+
 	//Poker poker(player1, player2);
 	//poker.launch();
 	return 1;

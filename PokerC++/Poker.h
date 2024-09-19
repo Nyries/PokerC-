@@ -36,7 +36,10 @@ public:
 	//Game actions
 	void launch();
 	void gameLoop();
-	 //Shuffle les cartes et lance un round. Distribution des cartes -> attentes des choix des joueurs -> 
+	void flop();
+	void turn();
+	void river();
+	//Shuffle les cartes et lance un round. Distribution des cartes -> attentes des choix des joueurs -> 
 };
 
 #endif
